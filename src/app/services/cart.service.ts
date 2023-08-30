@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { IItem } from '../components/items-list/items-list.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import * as CartActions from '../store/cart/cart.actions';
+import { Observable } from 'rxjs';
+import {
+  selectIsCartOpen,
+  selectCartItems,
+} from '../store/cart/cart.selectors'; // Adjust the path
 
 export interface CartItem {
   item: IItem;
@@ -11,18 +17,12 @@ export interface CartItem {
   providedIn: 'root',
 })
 export class CartService {
-  private cartOpenSubject = new BehaviorSubject<boolean>(false);
-  isCartOpen$ = this.cartOpenSubject.asObservable();
+  isCartOpen$ = this.store.select(selectIsCartOpen);
+  cartItems$ = this.store.select(selectCartItems);
 
-  private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
-  cartItems$ = this.cartItemsSubject.asObservable();
+  constructor(private store: Store) {}
 
-  constructor() {}
-
-  setIsCartOpen(open: boolean): void {
-    this.cartOpenSubject.next(open);
-  }
-  toggleCart(): Observable<any> {
+  toggleCart(): Observable<boolean> {
     return this.isCartOpen$;
   }
 
@@ -30,49 +30,18 @@ export class CartService {
     return this.cartItems$;
   }
 
-  addItemToCart(item: IItem): void {
-    const cartItems = this.cartItemsSubject.getValue();
-    const existingCartItem = cartItems.find((ci) => ci.item.id === item.id);
-
-    if (existingCartItem) {
-      existingCartItem.quantity++;
-    } else {
-      cartItems.push({ item, quantity: 1 });
-    }
-
-    this.cartItemsSubject.next(cartItems);
-
-    // this.updateCartCountAndTotal();
+  setIsCartOpen(open: boolean): void {
+    this.store.dispatch(CartActions.setIsCartOpen({ isOpen: open }));
+  }
+  addItemToCart(item: IItem) {
+    this.store.dispatch(CartActions.addItemToCart({ item }));
   }
 
-  removeItemFromCart(item: IItem): void {
-    const cartItems = this.cartItemsSubject.getValue();
-    const existingCartItem = cartItems.find((ci) => ci.item.id === item.id);
-
-    if (existingCartItem && existingCartItem.quantity > 1) {
-      existingCartItem.quantity--;
-    } else {
-      const updatedCartItems = cartItems.filter((ci) => ci.item.id !== item.id);
-      this.cartItemsSubject.next(updatedCartItems);
-    }
-
-    // this.updateCartCountAndTotal();
+  removeItemFromCart(item: IItem) {
+    this.store.dispatch(CartActions.removeItemFromCart({ item }));
   }
 
-  deleteItemFromCart(item: IItem): void {
-    const cartItems = this.cartItemsSubject.getValue();
-    const updatedCartItems = cartItems.filter((ci) => ci.item.id !== item.id);
-    this.cartItemsSubject.next(updatedCartItems);
-  }
-
-  private updateCartCountAndTotal(): void {
-    const cartItems = this.cartItemsSubject.getValue();
-    const cartCount = cartItems.reduce((acc, ci) => acc + ci.quantity, 0);
-    const cartTotal = cartItems.reduce(
-      (acc, ci) => acc + ci.item.price * ci.quantity,
-      0
-    );
-
-    // this.cartOpenSubject.next(cartCount > 0);
+  deleteItemFromCart(item: IItem) {
+    this.store.dispatch(CartActions.deleteItemFromCart({ item }));
   }
 }

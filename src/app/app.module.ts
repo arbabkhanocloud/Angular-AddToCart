@@ -4,7 +4,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { StoreModule } from '@ngrx/store';
 
+import * as fromCreateCart from '../app/store/cart/cart.reducer';
 import { AppComponent } from './app.component';
 import { ItemsListComponent } from './components/items-list/items-list.component';
 import { ItemComponent } from './components/item/item.component';
@@ -14,7 +16,14 @@ import { CartDialogComponent } from './components/cart-dialog/cart-dialog.compon
 import { CartItemComponent } from './components/cart-item/cart-item.component';
 
 @NgModule({
-  declarations: [AppComponent, ItemsListComponent, ItemComponent, CartComponent, CartDialogComponent, CartItemComponent],
+  declarations: [
+    AppComponent,
+    ItemsListComponent,
+    ItemComponent,
+    CartComponent,
+    CartDialogComponent,
+    CartItemComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -22,6 +31,7 @@ import { CartItemComponent } from './components/cart-item/cart-item.component';
     MatButtonModule,
     MatCardModule,
     MatIconModule,
+    StoreModule.forRoot({ cart: fromCreateCart.reducer }),
   ],
   providers: [],
   bootstrap: [AppComponent],
