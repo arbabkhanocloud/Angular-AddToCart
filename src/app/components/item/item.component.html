@@ -1,0 +1,18 @@
+<mat-card class="item-card">
+    <mat-card-header>
+        <span>
+            Item: {{item.name}}
+        </span>
+        <span>
+            Price: ${{item.price}}
+        </span>
+    </mat-card-header>
+    <img mat-card-image src={{item.src}} alt={{item.name}}>
+    <mat-card-content>
+        <span></span>
+    </mat-card-content>
+    <button mat-raised-button color="blue" class="add-btn" (click)="onAdd(item)">
+        <mat-icon>add_shopping_cart</mat-icon>
+        Add To Cart
+    </button>
+</mat-card>

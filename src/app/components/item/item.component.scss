@@ -1,0 +1,22 @@
+.item-card {
+    text-align: center;
+    max-width: 200px;
+  }
+  
+  .add-btn:hover{
+    color: blue;
+  }
+
+  .card-header{
+    display: flex;
+    justify-content: space-between;
+  }
+.mat-mdc-card-header{
+  background-color: rgb(224, 224, 239);
+  padding: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 25px;
+}

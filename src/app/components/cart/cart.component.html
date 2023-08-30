@@ -1,0 +1,5 @@
+<div class="nav">
+    <mat-icon (click)="onToggle()">shopping_cart</mat-icon>
+    <app-cart-dialog *ngIf="isCartOpen" [cartItems]="itemsInCart"></app-cart-dialog>
+
+</div>

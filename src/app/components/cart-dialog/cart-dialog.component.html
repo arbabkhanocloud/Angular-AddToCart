@@ -1,0 +1,15 @@
+<div class="cart-dropdown-container">
+    <div *ngIf="cartItems.length > 0">
+        <div class="cart-items">
+            <app-cart-item *ngFor="let item of cartItems" [cartItem]="item"></app-cart-item>
+        </div>
+        <br />
+        <span className="total">Total Items: {{getTotalItems()}}</span>
+        <br />
+        <span className="total-price">Total Price: ${{getTotalPrice()}}</span>
+        <br />
+    </div>
+    <div *ngIf="!cartItems.length">
+        <p>No item is added!!!</p>
+    </div>
+</div>
